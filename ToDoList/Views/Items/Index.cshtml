@@ -8,12 +8,14 @@
     <p>There are no items in the list.</p>
   }
   <ul>
-    <!-- Model.sort((itemA, itemB) => itemA.priority - itemB.priority) -->
-    
-
     @foreach (Item item in Model)
     {
-      <li>@item.Description @item.Priority</li>
+      <li><a href="/items/@item.Id">@item.Description @item.Priority</a></li>
     }
   </ul>
+
 <a href="/items/new">Add a new item.</a>
+
+<form action="/items/delete" method="post">
+  <button type="submit" name="button">Clear All Items</button>
+</form>
