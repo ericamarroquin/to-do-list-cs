@@ -6,18 +6,30 @@ namespace ToDoList.Models
   public class Item
   {
     public string Description { get; set; }
-    public string Priority { get; set; }
     public int Id { get; }
 
     public Item(string description)
     {
       Description = description;
     }
-
     public Item(string description, int id)
     {
       Description = description;
       Id = id;
+    }
+
+    public override bool Equals(System.Object otherItem)
+    {
+      if (!(otherItem is Item))
+      {
+        return false;
+      }
+      else
+      {
+        Item newItem = (Item) otherItem;
+        bool descriptionEquality = (this.Description == newItem.Description);
+        return descriptionEquality;
+      }
     }
 
     public static List<Item> GetAll()
@@ -30,10 +42,10 @@ namespace ToDoList.Models
       MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
       while (rdr.Read())
       {
-        int itemId = rdr.GetInt32(0);
-        string itemDescription = rdr.GetString(1);
-        Item newItem = new Item(itemDescription, itemId);
-        allItems.Add(newItem);
+          int itemId = rdr.GetInt32(0);
+          string itemDescription = rdr.GetString(1);
+          Item newItem = new Item(itemDescription, itemId);
+          allItems.Add(newItem);
       }
       conn.Close();
       if (conn != null)
@@ -45,12 +57,26 @@ namespace ToDoList.Models
 
     public static void ClearAll()
     {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"DELETE FROM items;";
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
     }
-
     public static Item Find(int searchId)
     {
-      Item placeholderitem = Item("placeholder item");
-      return placeholderitem;
+      Item placeholderItem = new Item("placeholder item");
+      return placeholderItem;
+    }
+
+    public void Save()
+    {
+      
     }
   }
 }
