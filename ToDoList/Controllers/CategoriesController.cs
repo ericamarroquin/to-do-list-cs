@@ -1,18 +1,30 @@
 using System.Collections.Generic;
-using System;
 using Microsoft.AspNetCore.Mvc;
 using ToDoList.Models;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
-// namespace ToDoList.Controllers
-// {
-//   public class CategoriesController : Controller
-//   {
-//     [HttpGet("/categories")]
-//     public ActionResult Index()
-//     {
-//       List<Category> allCategories = Category.GetAll();
-//       return View(allCategories);
-//     }
+namespace ToDoList.Controllers
+{
+  public class CategoriesController : Controller
+  {
+    private readonly ToDoListContext _db;
+
+    public CategoriesController(ToDoListContext db)
+    {
+      _db = db;
+    }
+
+    public ActionResult Index()
+    {
+      List<Category> model = _db.Categories.ToList();
+      return View(model);
+    }
+
+    public ActionResult Create()
+    {
+      
+    }
 
 //     [HttpGet("/categories/new")]
 //     public ActionResult New()
@@ -51,5 +63,5 @@ using ToDoList.Models;
 //       model.Add("category", foundCategory);
 //       return View("Show", model);
 //     }
-//   }
-// }
+  }
+}
